@@ -32,7 +32,7 @@ def request(url):
     path = '/' + path
 
     if ":" in host:
-        host, port = host.split(":", 1)
+        host, port = host.split(':', 1)
         port = int(port)
     else:
         port = HTTP_PORT if scheme == HTTP_SCHEME else HTTPS_PORT
