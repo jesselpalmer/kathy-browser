@@ -31,7 +31,11 @@ def request(url):
     host, path = url.split('/', 1)
     path = '/' + path
 
-    port = HTTP_PORT if scheme == HTTP_SCHEME else HTTPS_PORT
+    if ":" in host:
+        host, port = host.split(":", 1)
+        port = int(port)
+    else:
+        port = HTTP_PORT if scheme == HTTP_SCHEME else HTTPS_PORT
 
     if scheme == HTTPS_SCHEME:
         ctx = ssl.create_default_context()
@@ -87,7 +91,7 @@ def load(url):
 
 
 if __name__ == '__main__':
-    default_site = 'https://example.org/'
+    default_site = 'http://example.org:80/'
 
     if len(sys.argv) >= 2:
         site = sys.argv[1]
