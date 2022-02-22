@@ -1,4 +1,5 @@
 import socket
+import ssl
 import sys
 
 HTTP_PORT = 80
@@ -14,7 +15,7 @@ OK_STATUS_CODE = '200'
 
 
 def is_valid_url(url):
-    return url.startswith(HTTP_BEGINNING)
+    return url.startswith(HTTP_BEGINNING) or url.startswith(HTTPS_BEGINNING)
 
 
 def request(url):
@@ -31,6 +32,10 @@ def request(url):
     path = '/' + path
 
     port = HTTP_PORT if scheme == HTTP_SCHEME else HTTPS_PORT
+
+    if scheme == HTTPS_SCHEME:
+        ctx = ssl.create_default_context()
+        s = ctx.wrap_socket(s, server_hostname=host)
 
     s.connect((host, port))
 
@@ -82,7 +87,7 @@ def load(url):
 
 
 if __name__ == '__main__':
-    default_site = 'http://example.org/'
+    default_site = 'https://example.org/'
 
     if len(sys.argv) >= 2:
         site = sys.argv[1]
